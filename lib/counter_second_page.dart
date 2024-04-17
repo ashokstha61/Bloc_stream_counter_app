@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:stream_bloc/counter_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stream_bloc/cubit/counter_cubit.dart';
 
 class CounterSecondScreen extends StatelessWidget {
   const CounterSecondScreen({
@@ -28,12 +28,10 @@ class CounterSecondScreen extends StatelessWidget {
               //     );
               //   },
               // ),
-              StreamBuilder<int>(
-                stream: CounterRepository.counterStream,
-                initialData: 0,
-                builder: (context, snapshot) {
+              BlocBuilder<CounterCubit, int>(
+                builder: (context, state) {
                   return Text(
-                    "${snapshot.data}",
+                    "$state",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 30,
@@ -41,12 +39,14 @@ class CounterSecondScreen extends StatelessWidget {
                   );
                 },
               ),
+
               SizedBox(
                 height: 16,
               ),
               TextButton(
                 onPressed: () {
-                  CounterRepository.incrementCount();
+                  // BlocProvider.of<CounterCubit>(context).increase();
+                  context.read<CounterCubit>().increase();
                 },
                 child: Text("Increment"),
               ),
