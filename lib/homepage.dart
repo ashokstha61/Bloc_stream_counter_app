@@ -39,6 +39,9 @@ class MyHomePage extends StatelessWidget {
             //       );
             //     }),
             BlocBuilder<CounterCubit, int>(
+              buildWhen: (previous, current) {
+                return current.isEven;
+              },
               builder: (context, state) {
                 return Text(
                   "$state",
