@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stream_bloc/cubit/counter_cubit.dart';
+import 'package:stream_bloc/cubit/counter_state.dart';
 
 class CounterSecondScreen extends StatelessWidget {
   const CounterSecondScreen({
@@ -28,15 +30,19 @@ class CounterSecondScreen extends StatelessWidget {
               //     );
               //   },
               // ),
-              BlocBuilder<CounterCubit, int>(
+              BlocBuilder<CounterCubit, CounterState>(
                 builder: (context, state) {
-                  return Text(
-                    "$state",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                    ),
-                  );
+                  if (state is CounterSuccessState) {
+                    return Text(
+                      "${state.count}",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                      ),
+                    );
+                  } else {
+                    return CupertinoActivityIndicator();
+                  }
                 },
               ),
 

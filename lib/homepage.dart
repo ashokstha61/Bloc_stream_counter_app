@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stream_bloc/counter_second_page.dart';
 import 'package:stream_bloc/cubit/counter_cubit.dart';
+import 'package:stream_bloc/cubit/counter_state.dart';
 
 class MyHomePage extends StatelessWidget {
   final String title;
@@ -38,28 +40,38 @@ class MyHomePage extends StatelessWidget {
             //         ],
             //       );
             //     }),
-            BlocConsumer<CounterCubit, int>(
+            BlocConsumer<CounterCubit, CounterState>(
               listenWhen: (previous, current) {
-                return current.isEven;
+                if (current is CounterSuccessState) {
+                  if (current.count > 5) {
+                    return current.count.isEven;
+                  } else {
+                    return false;
+                  }
+                } else {
+                  return false;
+                }
               },
               listener: (context, state) {
-                if (state > 5) {
+                if (state is CounterSuccessState) {
                   ScaffoldMessenger.of(context).clearSnackBars();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text("count exceeded  5 which is $state"),
+                      content:
+                          Text("count exceeded  5 which is ${state.count}"),
                     ),
                   );
                 }
               },
-              buildWhen: (previous, current) {
-                return current.isEven;
-              },
               builder: (context, state) {
-                return Text(
-                  "$state",
-                  style: Theme.of(context).textTheme.headlineMedium,
-                );
+                if (state is CounterSuccessState) {
+                  return Text(
+                    "${state.count}",
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  );
+                } else {
+                  return CupertinoActivityIndicator();
+                }
               },
             ),
 
