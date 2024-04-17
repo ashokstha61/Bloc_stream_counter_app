@@ -38,7 +38,20 @@ class MyHomePage extends StatelessWidget {
             //         ],
             //       );
             //     }),
-            BlocBuilder<CounterCubit, int>(
+            BlocConsumer<CounterCubit, int>(
+              listenWhen: (previous, current) {
+                return current.isEven;
+              },
+              listener: (context, state) {
+                if (state > 5) {
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("count exceeded  5 which is $state"),
+                    ),
+                  );
+                }
+              },
               buildWhen: (previous, current) {
                 return current.isEven;
               },
